@@ -22,13 +22,11 @@ public class ExactStringMatcher extends BodyMatcher<String> implements Matcher<S
             result = true;
         } else if (matched != null) {
             if (matched.equals(matcher)) {
+                PropertiesMatched.increment();
                 result = true;
-            }
-            // case insensitive comparison is mainly to improve matching in web containers like Tomcat that convert header names to lower case
-            if (ignoreCase) {
-                if (matched.equalsIgnoreCase(matcher)) {
-                    result = true;
-                }
+            } else if (ignoreCase && matched.equalsIgnoreCase(matcher)) { // case insensitive comparison is mainly to improve matching in web containers like Tomcat that convert header names to lower case
+                PropertiesMatched.increment();
+                result = true;
             }
         }
 

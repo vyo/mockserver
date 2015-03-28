@@ -1,7 +1,6 @@
 package org.mockserver.matchers;
 
 import org.mockserver.collections.CaseInsensitiveRegexHashMap;
-import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 import org.mockserver.model.KeyAndValue;
 import org.mockserver.model.ObjectWithReflectiveEqualsHashCodeToString;
 
@@ -21,6 +20,7 @@ public class HashMapMatcher extends ObjectWithReflectiveEqualsHashCodeToString i
         boolean result = false;
 
         if (KeyAndValue.toHashMap(values).containsAll(multiMap)) {
+            PropertiesMatched.increment();
             result = true;
         } else {
             logger.trace("Map [{}] is not a subset of [{}]", this.multiMap, KeyAndValue.toHashMap(values));

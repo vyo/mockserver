@@ -18,11 +18,12 @@ public class JsonStringMatcher extends BodyMatcher<String> implements Matcher<St
     public boolean matches(String matched) {
         boolean result = false;
 
-        JSONCompareResult jsonCompareResult = null;
+        JSONCompareResult jsonCompareResult;
         try {
             jsonCompareResult = compareJSON(matcher, matched, JSONCompareMode.LENIENT);
 
             if (jsonCompareResult.passed()) {
+                PropertiesMatched.increment();
                 result = true;
             }
 

@@ -7,8 +7,11 @@ import org.mockserver.client.serialization.Base64Converter;
 import org.mockserver.client.serialization.ExpectationSerializer;
 import org.mockserver.matchers.HttpRequestMatcher;
 import org.mockserver.matchers.MatcherBuilder;
+import org.mockserver.matchers.PropertiesMatched;
 import org.mockserver.matchers.Times;
-import org.mockserver.model.*;
+import org.mockserver.model.Action;
+import org.mockserver.model.HttpRequest;
+import org.mockserver.model.ObjectWithReflectiveEqualsHashCodeToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,18 +58,24 @@ public class MockServerMatcher extends ObjectWithReflectiveEqualsHashCodeToStrin
 
     public synchronized Action handle(HttpRequest httpRequest) {
         ArrayList<Expectation> expectations = new ArrayList<Expectation>(this.expectations);
+        Action action = null;
+        int maxPropertiesMatched = 0;
         for (Expectation expectation : expectations) {
+            PropertiesMatched.reset();
             if (expectation.matches(httpRequest)) {
-                expectation.decrementRemainingMatches();
-                if (!expectation.getTimes().greaterThenZero()) {
-                    if (this.expectations.contains(expectation)) {
-                        this.expectations.remove(expectation);
+                if (PropertiesMatched.count() > maxPropertiesMatched) {
+                    expectation.decrementRemainingMatches();
+                    if (!expectation.getTimes().greaterThenZero()) {
+                        if (this.expectations.contains(expectation)) {
+                            this.expectations.remove(expectation);
+                        }
                     }
+                    maxPropertiesMatched = PropertiesMatched.count();
+                    action = expectation.getAction(true);
                 }
-                return expectation.getAction(true);
             }
         }
-        return null;
+        return action;
     }
 
     public synchronized void clear(HttpRequest httpRequest) {

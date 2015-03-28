@@ -20,6 +20,7 @@ public class MultiValueMapMatcher extends ObjectWithReflectiveEqualsHashCodeToSt
         boolean result = false;
 
         if (KeyToMultiValue.toMultiMap(values).containsAll(multiMap)) {
+            PropertiesMatched.increment();
             result = true;
         } else {
             logger.trace("Map [{}] is not a subset of [{}]", this.multiMap, KeyToMultiValue.toMultiMap(values));

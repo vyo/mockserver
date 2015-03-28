@@ -19,7 +19,10 @@ public class BinaryMatcher extends BodyMatcher<byte[]> implements Matcher<byte[]
     public boolean matches(byte[] matched) {
         boolean result = false;
 
-        if (matcher == null || matcher.length == 0 || Arrays.equals(matcher, matched)) {
+        if (matcher == null || matcher.length == 0) {
+            result = true;
+        } else if (Arrays.equals(matcher, matched)) {
+            PropertiesMatched.increment();
             result = true;
         }
 

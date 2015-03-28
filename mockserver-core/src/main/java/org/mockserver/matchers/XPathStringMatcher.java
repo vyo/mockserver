@@ -36,11 +36,15 @@ public class XPathStringMatcher extends BodyMatcher<String> implements Matcher<S
     }
 
     public boolean matches(final String matched) {
+        boolean result = false;
+
         if (xpathExpression == null) {
             logger.warn("Attempting match against null XPath Expression for [" + matched + "]" + new RuntimeException("Attempting match against null XPath Expression for [" + matched + "]"));
         } else if (matcher.equals(matched)) {
-            return true;
+            PropertiesMatched.increment();
+            result = true;
         } else if (matched != null) {
+            PropertiesMatched.increment();
             // match as xpath - matcher -> matched
             try {
                 DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -61,14 +65,16 @@ public class XPathStringMatcher extends BodyMatcher<String> implements Matcher<S
                         logger.debug("SAXParseException while performing match between [" + matcher + "] and [" + matched + "]", exception);
                     }
                 });
-                return (Boolean) xpathExpression.evaluate(documentBuilder.parse(new InputSource(new StringReader(matched))), XPathConstants.BOOLEAN);
+                result = (Boolean) xpathExpression.evaluate(documentBuilder.parse(new InputSource(new StringReader(matched))), XPathConstants.BOOLEAN);
             } catch (Exception e) {
                 logger.trace("Error while matching xpath [" + matcher + "] against string [" + matched + "] assuming no match - " + e.getMessage());
             }
         }
 
-        logger.trace("Failed to match [{}] with [{}]", matched, this.matcher);
-        return false;
+        if (!result) {
+            logger.trace("Failed to match [{}] with [{}]", matched, this.matcher);
+        }
+        return result;
     }
 
     @Override

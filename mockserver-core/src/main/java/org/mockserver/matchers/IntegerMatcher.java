@@ -16,6 +16,7 @@ public class IntegerMatcher extends BodyMatcher<Integer> implements Matcher<Inte
         if (matcher == null) {
             result = true;
         } else if (matched != null) {
+            PropertiesMatched.increment();
             result = matcher.equals(matched);
         }
 
