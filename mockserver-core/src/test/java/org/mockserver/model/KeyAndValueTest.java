@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockserver.model.Not.not;
+import static org.mockserver.model.NottableString.not;
 import static org.mockserver.model.NottableString.string;
 
 public class KeyAndValueTest {
@@ -27,20 +27,20 @@ public class KeyAndValueTest {
     @Test
     public void shouldConvertNottedCookieToHashMap() {
         // given
-        Cookie nottedCookie = not(new Cookie("name", "value"));
+        Cookie nottedCookie = new Cookie(not("name"), not("value"));
 
         // when
         CaseInsensitiveNottableRegexHashMap hashMap = KeyAndValue.toHashMap(nottedCookie);
 
         // then
-        assertThat(hashMap.get(NottableString.not("name")), is(NottableString.not("value")));
+        assertThat(hashMap.get(not("name")), is(not("value")));
     }
 
     @Test
-    public void shouldConvertListOfNottedCookieToHashMap() {
+    public void shouldConvertListOfNottableCookiesToHashMap() {
         // given
-        Cookie firstNottedCookie = not(new Cookie("name_one", "value_one"));
-        Cookie secondCookie = new Cookie("name_two", "value_two");
+        Cookie firstNottedCookie = new Cookie(not("name_one"), not("value_one"));
+        Cookie secondCookie = new Cookie(string("name_two"), string("value_two"));
 
         // when
         CaseInsensitiveNottableRegexHashMap hashMap = KeyAndValue.toHashMap(
@@ -51,7 +51,7 @@ public class KeyAndValueTest {
         );
 
         // then
-        assertThat(hashMap.get(NottableString.not("name_one")), is(NottableString.not("value_one")));
+        assertThat(hashMap.get(not("name_one")), is(not("value_one")));
         assertThat(hashMap.get(string("name_two")), is(string("value_two")));
     }
 

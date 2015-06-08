@@ -27,8 +27,8 @@ public class CaseInsensitiveNottableRegexHashMap extends LinkedHashMap<NottableS
         boolean result = false;
 
         for (Entry<NottableString, NottableString> matcherEntry : entrySet()) {
-            if (RegexStringMatcher.matches(matcherEntry.getValue(), value, true)
-                    && RegexStringMatcher.matches(matcherEntry.getKey(), key, true)) {
+            if (RegexStringMatcher.matches(value, matcherEntry.getValue(), true)
+                    && RegexStringMatcher.matches(key, matcherEntry.getKey(), true)) {
                 result = true;
                 break;
             }

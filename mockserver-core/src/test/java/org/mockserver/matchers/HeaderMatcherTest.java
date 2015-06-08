@@ -1,8 +1,9 @@
 package org.mockserver.matchers;
 
 import org.junit.Test;
-import org.mockserver.model.*;
 import org.mockserver.model.Header;
+import org.mockserver.model.KeyToMultiValue;
+import org.mockserver.model.Not;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +45,7 @@ public class HeaderMatcherTest {
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))));
-        
+
         // then - not matcher
         assertFalse(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),

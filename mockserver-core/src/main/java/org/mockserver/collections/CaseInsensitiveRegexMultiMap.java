@@ -18,15 +18,9 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
     private final CaseInsensitiveNottableRegexListHashMap backingMap = new CaseInsensitiveNottableRegexListHashMap();
 
     public boolean containsAll(CaseInsensitiveRegexMultiMap subSet) {
-        for (NottableString subSetKey : subSet.keySet()) {
-            if (!(subSetKey.isNot() != containsKey(subSetKey.getValue()))) { // check if sub-set key exists in super-set
+        for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
+            if (!containsKeyValue(entry.getKey(), entry.getValue())) {
                 return false;
-            } else { // check if sub-set value matches at least one super-set value using regex
-                for (NottableString subSetValue : subSet.getAll(subSetKey.getValue())) {
-                    if (!containsKeyValue(subSetKey, subSetValue)) {
-                        return false;
-                    }
-                }
             }
         }
         return true;
@@ -36,8 +30,8 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         boolean result = false;
 
         for (Entry<NottableString, NottableString> matcherEntry : entrySet()) {
-            if (RegexStringMatcher.matches(matcherEntry.getValue(), value, true)
-                    && RegexStringMatcher.matches(matcherEntry.getKey(), key, true)) {
+            if (RegexStringMatcher.matches(value, matcherEntry.getValue(), true)
+                    && RegexStringMatcher.matches(key, matcherEntry.getKey(), true)) {
                 result = true;
                 break;
             }
@@ -58,6 +52,8 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
                     }
                 }
             }
+        } else if (value instanceof String) {
+            return containsValue(string((String) value));
         }
         return false;
     }

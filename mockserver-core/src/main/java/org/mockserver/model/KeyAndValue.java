@@ -10,7 +10,7 @@ import static org.mockserver.model.NottableString.string;
 /**
  * @author jamesdbloom
  */
-public class KeyAndValue extends Not {
+public class KeyAndValue extends ObjectWithJsonToString {
     private final NottableString name;
     private final NottableString value;
 

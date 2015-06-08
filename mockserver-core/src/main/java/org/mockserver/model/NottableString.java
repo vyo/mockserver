@@ -49,16 +49,14 @@ public class NottableString extends Not {
 
     @Override
     public boolean equals(Object other) {
-        if (other == null) {
-            return value != null;
-        } else if (value == null) {
-            return false;
-        }
         if (other instanceof String) {
-            return isNot() != (value.equals(other));
+            return isNot() != other.equals(value);
         } else if (other instanceof NottableString) {
             NottableString otherNottableString = (NottableString) other;
-            return otherNottableString.isNot() == (isNot() == (value.equals(otherNottableString.getValue())));
+            if (otherNottableString.getValue() == null) {
+                return value == null;
+            }
+            return otherNottableString.isNot() == (isNot() == otherNottableString.getValue().equals(value));
         }
         return false;
     }

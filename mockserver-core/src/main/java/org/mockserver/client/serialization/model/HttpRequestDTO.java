@@ -36,7 +36,7 @@ public class HttpRequestDTO extends NotDTO {
             });
             cookies = Lists.transform(httpRequest.getCookies(), new Function<Cookie, CookieDTO>() {
                 public CookieDTO apply(Cookie cookie) {
-                    return new CookieDTO(cookie, cookie.getNot());
+                    return new CookieDTO(cookie);
                 }
             });
             queryStringParameters = Lists.transform(httpRequest.getQueryStringParameters(), new Function<Parameter, ParameterDTO>() {
@@ -62,7 +62,7 @@ public class HttpRequestDTO extends NotDTO {
                 }))
                 .withCookies(Lists.transform(cookies, new Function<CookieDTO, Cookie>() {
                     public Cookie apply(CookieDTO cookie) {
-                        return Not.not(cookie.buildObject(), cookie.getNot());
+                        return cookie.buildObject();
                     }
                 }))
                 .withQueryStringParameters(Lists.transform(queryStringParameters, new Function<ParameterDTO, Parameter>() {

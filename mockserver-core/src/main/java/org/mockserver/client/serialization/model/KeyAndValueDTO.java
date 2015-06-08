@@ -2,18 +2,18 @@ package org.mockserver.client.serialization.model;
 
 import org.mockserver.model.KeyAndValue;
 import org.mockserver.model.NottableString;
+import org.mockserver.model.ObjectWithReflectiveEqualsHashCodeToString;
 
 import java.util.List;
 
 /**
  * @author jamesdbloom
  */
-public class KeyAndValueDTO extends NotDTO {
+public class KeyAndValueDTO extends ObjectWithReflectiveEqualsHashCodeToString {
     private NottableString name;
     private NottableString value;
 
-    protected KeyAndValueDTO(KeyAndValue keyAndValue, Boolean not) {
-        super(not);
+    protected KeyAndValueDTO(KeyAndValue keyAndValue) {
         name = keyAndValue.getName();
         value = keyAndValue.getValue();
     }

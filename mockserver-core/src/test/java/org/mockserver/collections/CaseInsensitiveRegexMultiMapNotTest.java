@@ -10,6 +10,7 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.junit.Assert.*;
 import static org.mockserver.model.NottableString.not;
 import static org.mockserver.model.NottableString.string;
+import static org.mockserver.model.NottableString.strings;
 
 /**
  * @author jamesdbloom
@@ -26,7 +27,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals(Arrays.asList("one_one", "one_two", "one_three"), circularMultiMap.removeAll(string("one")));
+        assertEquals(strings("one_one", "one_two", "one_three"), circularMultiMap.removeAll(string("one")));
         assertNull(circularMultiMap.removeAll(string("three")));
 
         // then
@@ -40,12 +41,12 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertFalse(circularMultiMap.containsValue("one_two"));
         assertFalse(circularMultiMap.containsValue("one_three"));
         assertTrue(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("two"), circularMultiMap.values());
+        assertEquals(strings("two"), circularMultiMap.values());
         // - should have correct values per key
         assertNull(circularMultiMap.get("one"));
-        assertEquals("two", circularMultiMap.get("two"));
+        assertEquals(string("two"), circularMultiMap.get("two"));
         assertEquals(0, circularMultiMap.getAll("one").size());
-        assertEquals(Arrays.asList("two"), circularMultiMap.getAll("two"));
+        assertEquals(strings("two"), circularMultiMap.getAll("two"));
     }
 
     @Test
@@ -58,8 +59,8 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals(Arrays.asList("two"), circularMultiMap.removeAll(not("one")));
-        assertEquals(Arrays.asList("one_one", "one_two", "one_three"), circularMultiMap.removeAll(not("three")));
+        assertEquals(strings("two"), circularMultiMap.removeAll(not("one")));
+        assertEquals(strings("one_one", "one_two", "one_three"), circularMultiMap.removeAll(not("three")));
 
         // then
         assertEquals(0, circularMultiMap.size());
@@ -79,7 +80,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("one_one", circularMultiMap.remove(string("one")));
+        assertEquals(string("one_one"), circularMultiMap.remove(string("one")));
         assertNull(circularMultiMap.remove(string("three")));
 
         // then
@@ -93,12 +94,12 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertTrue(circularMultiMap.containsValue("one_two"));
         assertTrue(circularMultiMap.containsValue("one_three"));
         assertTrue(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("one_two", "one_three", "two"), circularMultiMap.values());
+        assertEquals(strings("one_two", "one_three", "two"), circularMultiMap.values());
         // - should have correct values per key
-        assertEquals("one_two", circularMultiMap.get("one"));
-        assertEquals("two", circularMultiMap.get("two"));
-        assertEquals(Arrays.asList("one_two", "one_three"), circularMultiMap.getAll("one"));
-        assertEquals(Arrays.asList("two"), circularMultiMap.getAll("two"));
+        assertEquals(string("one_two"), circularMultiMap.get("one"));
+        assertEquals(string("two"), circularMultiMap.get("two"));
+        assertEquals(strings("one_two", "one_three"), circularMultiMap.getAll("one"));
+        assertEquals(strings("two"), circularMultiMap.getAll("two"));
     }
 
     @Test
@@ -111,8 +112,8 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("two", circularMultiMap.remove(not("one")));
-        assertEquals("one_one", circularMultiMap.remove(not("three")));
+        assertEquals(string("two"), circularMultiMap.remove(not("one")));
+        assertEquals(string("one_one"), circularMultiMap.remove(not("three")));
 
         // then
         assertEquals(2, circularMultiMap.size());
@@ -125,7 +126,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertTrue(circularMultiMap.containsValue("one_two"));
         assertTrue(circularMultiMap.containsValue("one_three"));
         assertFalse(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("one_two", "one_three"), circularMultiMap.values());
+        assertEquals(strings("one_two", "one_three"), circularMultiMap.values());
     }
 
     @Test
@@ -138,7 +139,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("one_one", circularMultiMap.remove(string("o[a-z]{2}")));
+        assertEquals(string("one_one"), circularMultiMap.remove(string("o[a-z]{2}")));
         assertNull(circularMultiMap.remove(string("t[a-z]{3}")));
 
         // then
@@ -152,12 +153,12 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertTrue(circularMultiMap.containsValue("one_two"));
         assertTrue(circularMultiMap.containsValue("one_three"));
         assertTrue(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("one_two", "one_three", "two"), circularMultiMap.values());
+        assertEquals(strings("one_two", "one_three", "two"), circularMultiMap.values());
         // - should have correct values per key
-        assertEquals("one_two", circularMultiMap.get(".*n.*"));
-        assertEquals("two", circularMultiMap.get(".*o"));
-        assertEquals(Arrays.asList("one_two", "one_three"), circularMultiMap.getAll("one"));
-        assertEquals(Arrays.asList("two"), circularMultiMap.getAll("two"));
+        assertEquals(string("one_two"), circularMultiMap.get(".*n.*"));
+        assertEquals(string("two"), circularMultiMap.get(".*o"));
+        assertEquals(strings("one_two", "one_three"), circularMultiMap.getAll("one"));
+        assertEquals(strings("two"), circularMultiMap.getAll("two"));
     }
 
     @Test
@@ -170,8 +171,8 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("two", circularMultiMap.remove(not("o[a-z]{2}")));
-        assertEquals("one_one", circularMultiMap.remove(not("t[a-z]{3}")));
+        assertEquals(string("two"), circularMultiMap.remove(not("o[a-z]{2}")));
+        assertEquals(string("one_one"), circularMultiMap.remove(not("t[a-z]{3}")));
 
         // then
         assertEquals(2, circularMultiMap.size());
@@ -184,7 +185,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertTrue(circularMultiMap.containsValue("one_two"));
         assertTrue(circularMultiMap.containsValue("one_three"));
         assertFalse(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("one_two", "one_three"), circularMultiMap.values());
+        assertEquals(strings("one_two", "one_three"), circularMultiMap.values());
     }
 
     @Test
@@ -197,7 +198,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("one_one", circularMultiMap.remove(string("ONE")));
+        assertEquals(string("one_one"), circularMultiMap.remove(string("ONE")));
         assertNull(circularMultiMap.remove(string("three")));
 
         // then
@@ -211,12 +212,12 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertTrue(circularMultiMap.containsValue("one_two"));
         assertTrue(circularMultiMap.containsValue("one_three"));
         assertTrue(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("one_two", "one_three", "two"), circularMultiMap.values());
+        assertEquals(strings("one_two", "one_three", "two"), circularMultiMap.values());
         // - should have correct values per key
-        assertEquals("one_two", circularMultiMap.get("oNe"));
-        assertEquals("two", circularMultiMap.get("twO"));
-        assertEquals(Arrays.asList("one_two", "one_three"), circularMultiMap.getAll("one"));
-        assertEquals(Arrays.asList("two"), circularMultiMap.getAll("two"));
+        assertEquals(string("one_two"), circularMultiMap.get("oNe"));
+        assertEquals(string("two"), circularMultiMap.get("twO"));
+        assertEquals(strings("one_two", "one_three"), circularMultiMap.getAll("one"));
+        assertEquals(strings("two"), circularMultiMap.getAll("two"));
     }
 
     @Test
@@ -229,8 +230,8 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("two", circularMultiMap.remove(not("ONE")));
-        assertEquals("one_one", circularMultiMap.remove(not("three")));
+        assertEquals(string("two"), circularMultiMap.remove(not("ONE")));
+        assertEquals(string("one_one"), circularMultiMap.remove(not("three")));
 
         // then
         assertEquals(2, circularMultiMap.size());
@@ -243,7 +244,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertTrue(circularMultiMap.containsValue("one_two"));
         assertTrue(circularMultiMap.containsValue("one_three"));
         assertFalse(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("one_two", "one_three"), circularMultiMap.values());
+        assertEquals(strings("one_two", "one_three"), circularMultiMap.values());
     }
 
     @Test
@@ -256,7 +257,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals(Arrays.asList("one_one", "one_two", "one_three"), circularMultiMap.removeAll(string("o[a-z]{2}")));
+        assertEquals(strings("one_one", "one_two", "one_three"), circularMultiMap.removeAll(string("o[a-z]{2}")));
         assertNull(circularMultiMap.removeAll(string("t[a-z]{3}")));
 
         // then
@@ -270,12 +271,12 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertFalse(circularMultiMap.containsValue("one_two"));
         assertFalse(circularMultiMap.containsValue("one_three"));
         assertTrue(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("two"), circularMultiMap.values());
+        assertEquals(strings("two"), circularMultiMap.values());
         // - should have correct values per key
         assertNull(circularMultiMap.get("one"));
-        assertEquals("two", circularMultiMap.get("two"));
+        assertEquals(string("two"), circularMultiMap.get("two"));
         assertEquals(0, circularMultiMap.getAll("one").size());
-        assertEquals(Arrays.asList("two"), circularMultiMap.getAll("two"));
+        assertEquals(strings("two"), circularMultiMap.getAll("two"));
     }
 
     @Test
@@ -288,8 +289,8 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals(Arrays.asList("two"), circularMultiMap.removeAll(not("o[a-z]{2}")));
-        assertEquals(Arrays.asList("one_one", "one_two", "one_three"), circularMultiMap.removeAll(not("t[a-z]{3}")));
+        assertEquals(strings("two"), circularMultiMap.removeAll(not("o[a-z]{2}")));
+        assertEquals(strings("one_one", "one_two", "one_three"), circularMultiMap.removeAll(not("t[a-z]{3}")));
 
         // then
         assertEquals(0, circularMultiMap.size());
@@ -309,7 +310,7 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals(Arrays.asList("one_one", "one_two", "one_three"), circularMultiMap.removeAll(string("ONE")));
+        assertEquals(strings("one_one", "one_two", "one_three"), circularMultiMap.removeAll(string("ONE")));
         assertNull(circularMultiMap.removeAll(string("three")));
 
         // then
@@ -323,12 +324,12 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         assertFalse(circularMultiMap.containsValue("one_two"));
         assertFalse(circularMultiMap.containsValue("one_three"));
         assertTrue(circularMultiMap.containsValue("two"));
-        assertEquals(Arrays.asList("two"), circularMultiMap.values());
+        assertEquals(strings("two"), circularMultiMap.values());
         // - should have correct values per key
         assertNull(circularMultiMap.get("one"));
-        assertEquals("two", circularMultiMap.get("two"));
+        assertEquals(string("two"), circularMultiMap.get("two"));
         assertEquals(0, circularMultiMap.getAll("one").size());
-        assertEquals(Arrays.asList("two"), circularMultiMap.getAll("two"));
+        assertEquals(strings("two"), circularMultiMap.getAll("two"));
     }
 
     @Test
@@ -341,8 +342,8 @@ public class CaseInsensitiveRegexMultiMapNotTest {
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals(Arrays.asList("two"), circularMultiMap.removeAll(not("ONE")));
-        assertEquals(Arrays.asList("one_one", "one_two", "one_three"), circularMultiMap.removeAll(not("three")));
+        assertEquals(strings("two"), circularMultiMap.removeAll(not("ONE")));
+        assertEquals(strings("one_one", "one_two", "one_three"), circularMultiMap.removeAll(not("three")));
 
         // then
         assertEquals(0, circularMultiMap.size());

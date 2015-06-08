@@ -2651,7 +2651,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("GET")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withCookies(
-                                        not(cookie("OTHERrequestCookieNameOne", "requestCookieValueOne")),
+                                        cookie(NottableString.not("OTHERrequestCookieNameOne"), NottableString.not("requestCookieValueOne")),
                                         cookie("requestCookieNameTwo", "requestCookieValueTwo")
                                 )
                 )
@@ -3760,7 +3760,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("GET")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withCookies(
-                                        not(cookie("requestCookieNameOne", "requestCookieValueOne")),
+                                        cookie(NottableString.not("requestCookieNameOne"), NottableString.not("requestCookieValueOne")),
                                         cookie("requestCookieNameTwo", "requestCookieValueTwo")
                                 )
                 )

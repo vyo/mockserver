@@ -83,12 +83,12 @@ public class CaseInsensitiveRegexMultiMapTest {
         circularMultiMap.put("one", "one_three");
 
         // then
-        assertEquals(Arrays.asList(strings("one_one", "one_three", "two")), circularMultiMap.getAll("[a-z]{3}"));
-        assertEquals(Arrays.asList(strings("one_one", "one_three")), circularMultiMap.getAll("o[a-z]{2}"));
-        assertEquals(Arrays.asList(strings("one_one", "one_three")), circularMultiMap.getAll("one"));
-        assertEquals(Arrays.asList(strings("one_one", "one_three")), circularMultiMap.getAll("ONE"));
-        assertEquals(Arrays.asList(strings("one_one", "one_three")), circularMultiMap.getAll("One"));
-        assertEquals(Arrays.asList(strings("one_one", "one_three")), circularMultiMap.getAll("oNE"));
+        assertEquals(strings("one_one", "one_three", "two"), circularMultiMap.getAll("[a-z]{3}"));
+        assertEquals(strings("one_one", "one_three"), circularMultiMap.getAll("o[a-z]{2}"));
+        assertEquals(strings("one_one", "one_three"), circularMultiMap.getAll("one"));
+        assertEquals(strings("one_one", "one_three"), circularMultiMap.getAll("ONE"));
+        assertEquals(strings("one_one", "one_three"), circularMultiMap.getAll("One"));
+        assertEquals(strings("one_one", "one_three"), circularMultiMap.getAll("oNE"));
         assertEquals(Arrays.asList(string("two")), circularMultiMap.getAll("two"));
         assertEquals(Arrays.asList(string("two")), circularMultiMap.getAll("TWO"));
         assertEquals(2, circularMultiMap.size());
