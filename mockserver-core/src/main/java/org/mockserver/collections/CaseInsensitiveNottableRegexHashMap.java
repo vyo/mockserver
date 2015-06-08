@@ -60,6 +60,19 @@ public class CaseInsensitiveNottableRegexHashMap extends LinkedHashMap<NottableS
     }
 
     @Override
+    public synchronized boolean containsValue(Object value) {
+        boolean result = false;
+
+        if (value instanceof NottableString) {
+            result = super.containsValue(value);
+        } else if (value instanceof String) {
+            result = containsValue(string((String) value));
+        }
+
+        return result;
+    }
+
+    @Override
     public synchronized NottableString get(Object key) {
         if (key instanceof NottableString) {
             if (super.get(key) != null) {

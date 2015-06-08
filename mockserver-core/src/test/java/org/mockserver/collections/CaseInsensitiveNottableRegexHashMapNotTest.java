@@ -194,10 +194,8 @@ public class CaseInsensitiveNottableRegexHashMapNotTest {
         hashMap.put(".*key", "valueThree");
         hashMap.put(".*key.*", "valueFour");
 
-        // then - true if matching values multiple but notted with only one of multiple
-        assertTrue(hashMap.containsKeyValue(not("key"), string("valueOne")));
-
         // and  - false if matching values but notted
+        assertFalse(hashMap.containsKeyValue(not("key"), string("valueOne")));
         assertFalse(hashMap.containsKeyValue(not("key-ABC"), string("valueTwo")));
         assertFalse(hashMap.containsKeyValue(not("ABC-key"), string("valueThree")));
         assertFalse(hashMap.containsKeyValue(not("ABC-key-ABC"), string("valueFour")));

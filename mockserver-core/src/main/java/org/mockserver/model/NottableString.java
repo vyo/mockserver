@@ -35,8 +35,10 @@ public class NottableString extends Not {
 
     public static List<NottableString> strings(Collection<String> values) {
         List<NottableString> nottableValues = new ArrayList<NottableString>();
-        for (String value : values) {
-            nottableValues.add(string(value));
+        if (values != null && !values.isEmpty()) {
+            for (String value : values) {
+                nottableValues.add(string(value));
+            }
         }
         return nottableValues;
     }

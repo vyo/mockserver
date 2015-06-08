@@ -26,7 +26,6 @@ import static org.mockserver.model.HttpResponse.response;
 /**
  * @author jamesdbloom
  */
-@Ignore
 public class CompileGeneratedJavaCodeTest {
 
     @Test

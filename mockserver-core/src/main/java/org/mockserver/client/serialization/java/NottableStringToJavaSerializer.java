@@ -11,7 +11,7 @@ public class NottableStringToJavaSerializer {
         if (nottableString.isNot()) {
             return "not(\"" + nottableString.getValue() + "\")";
         } else {
-            return "string(\"" + nottableString.getValue() + "\")";
+            return "\"" + nottableString.getValue() + "\"";
         }
     }
 }
