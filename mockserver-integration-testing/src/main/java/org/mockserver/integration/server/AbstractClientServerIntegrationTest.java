@@ -4186,13 +4186,13 @@ public abstract class AbstractClientServerIntegrationTest {
                 HttpResponse httpResponse = httpClient.sendRequest(outboundRequest("localhost", port, servletContext, httpRequest));
                 List<Header> headers = new ArrayList<Header>();
                 for (Header header : httpResponse.getHeaders()) {
-                    if (!headersToIgnore.contains(header.getName().toLowerCase())) {
-                        if (header.getName().equals(HttpHeaders.CONTENT_TYPE)) {
+                    if (!headersToIgnore.contains(header.getName().getValue().toLowerCase())) {
+                        if (header.getName().getValue().equalsIgnoreCase(HttpHeaders.CONTENT_TYPE)) {
                             // this fixes Tomcat which removes the space between
                             // media type and charset in the Content-Type header
-                            for (String value : new ArrayList<String>(header.getValues())) {
+                            for (NottableString value : new ArrayList<NottableString>(header.getValues())) {
                                 header.getValues().clear();
-                                header.addValues(value.replace(";charset", "; charset"));
+                                header.addValues(value.getValue().replace(";charset", "; charset"));
                             }
                         }
                         headers.add(header);

@@ -46,9 +46,9 @@ public class ParameterBody extends Body<List<Parameter>> {
                 body.append(parameter.getName());
                 body.append('=');
             } else {
-                List<String> values = parameter.getValues();
+                List<NottableString> values = parameter.getValues();
                 for (int j = 0; j < values.size(); j++) {
-                    String value = values.get(j);
+                    String value = values.get(j).getValue();
                     body.append(parameter.getName());
                     body.append('=');
                     try {

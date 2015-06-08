@@ -1,6 +1,7 @@
 package org.mockserver.client.serialization.model;
 
 import org.mockserver.model.KeyAndValue;
+import org.mockserver.model.NottableString;
 
 import java.util.List;
 
@@ -8,8 +9,8 @@ import java.util.List;
  * @author jamesdbloom
  */
 public class KeyAndValueDTO extends NotDTO {
-    private String name;
-    private String value;
+    private NottableString name;
+    private NottableString value;
 
     protected KeyAndValueDTO(KeyAndValue keyAndValue, Boolean not) {
         super(not);
@@ -20,11 +21,11 @@ public class KeyAndValueDTO extends NotDTO {
     protected KeyAndValueDTO() {
     }
 
-    public String getName() {
+    public NottableString getName() {
         return name;
     }
 
-    public String getValue() {
+    public NottableString getValue() {
         return value;
     }
 }

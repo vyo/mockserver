@@ -3,7 +3,7 @@ package org.mockserver.matchers;
 import org.junit.Test;
 import org.mockserver.model.Cookie;
 import org.mockserver.model.KeyAndValue;
-import org.mockserver.model.KeyAndValue;
+import org.mockserver.model.Not;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import static org.mockserver.matchers.NotMatcher.not;
 public class CookieMatcherTest {
 
     @Test
-    public void shouldMatchMatchingString() {
+    public void shouldMatchMatchingCookie() {
         assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
@@ -26,10 +26,27 @@ public class CookieMatcherTest {
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
         ))));
+
+        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookie.*", "cookie.*")
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
     }
 
     @Test
-    public void shouldNotMatchMatchingStringWhenNotApplied() {
+    public void shouldNotMatchMatchingCookieWhenNotAppliedToMatcher() {
+        // given
+        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
+
+        // then - not matcher
         assertFalse(not(new HashMapMatcher(KeyAndValue.toHashMap(
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
@@ -37,13 +54,103 @@ public class CookieMatcherTest {
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
         ))));
+
+        // and - not cookie
+        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                Not.not(new Cookie("cookieTwoName", "cookieTwoValue"))
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
+
+        // and - not matcher and not cookie
+        assertTrue(not(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                Not.not(new Cookie("cookieTwoName", "cookieTwoValue"))
+        ))).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
     }
 
     @Test
-    public void shouldMatchMatchingStringWithNotCookieAndNormalCookie() {
+    public void shouldMatchMatchingCookieWithNotCookieAndNormalCookie() {
+//        // not matching cookie
+//        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
+//                new Cookie("cookieOneName", "cookieOneValue"),
+//                Not.not(new Cookie("cookieTwoName", "cookieTwoValue"))
+//        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+//                new Cookie("cookieOneName", "cookieOneValue"),
+//                new Cookie("cookieTwoName", "cookieTwoValue")
+//        ))));
+//
+//        // not extra cookie
+//        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+//                new Cookie("cookieOneName", "cookieOneValue"),
+//                new Cookie("cookieTwoName", "cookieTwoValue"),
+//                Not.not(new Cookie("cookieThreeName", "cookieThreeValue"))
+//        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+//                new Cookie("cookieOneName", "cookieOneValue"),
+//                new Cookie("cookieTwoName", "cookieTwoValue")
+//        ))));
+//
+//        // not only cookie
+//        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+//                Not.not(new Cookie("cookieThreeName", "cookieThreeValue"))
+//        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+//                new Cookie("cookieOneName", "cookieOneValue"),
+//                new Cookie("cookieTwoName", "cookieTwoValue")
+//        ))));
+//
+//        // not all cookies (but matching)
+//        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
+//                Not.not(new Cookie("cookie.*", ".*"))
+//        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+//                new Cookie("cookieOneName", "cookieOneValue"),
+//                new Cookie("cookieTwoName", "cookieTwoValue")
+//        ))));
+//
+//        // not all cookies (but not matching name)
+//        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+//                Not.not(new Cookie("cookie.*", "cookie.*"))
+//        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+//                new Cookie("notCookieOneName", "cookieOneValue"),
+//                new Cookie("notCookieTwoName", "cookieTwoValue")
+//        ))));
+
+        // not all cookies (but not matching value)
         assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+                Not.not(new Cookie("cookie.*", "cookie.*"))
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "notCookieOneValue"),
+                new Cookie("cookieTwoName", "notCookieTwoValue")
+        ))));
+    }
+
+    @Test
+    public void shouldMatchMatchingCookieWithOnlyCookie() {
+        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+                Not.not(new Cookie("cookieThreeName", "cookieThreeValue"))
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
                 new Cookie("cookieOneName", "cookieOneValue"),
-                org.mockserver.model.Not.not(new Cookie("cookieThree", "cookieThreeValueOne"))
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
+        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookieThree", "cookieThreeValueOne")
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
+
+        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
+                Not.not(new Cookie("cookieOneName", "cookieOneValue"))
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("cookieOneName", "cookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
+        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookieOneName", "cookieOneValue")
         )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
@@ -51,27 +158,27 @@ public class CookieMatcherTest {
     }
 
     @Test
-    public void shouldMatchMatchingStringWithOnlyCookie() {
+    public void shouldMatchMatchingCookieWithOnlyCookieForEmptyList() {
         assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
-                org.mockserver.model.Not.not(new Cookie("cookieThree", "cookieThreeValueOne"))
+                new ArrayList<KeyAndValue>()
         )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
-                new Cookie("cookieOneName", "cookieOneValue"),
-                new Cookie("cookieTwoName", "cookieTwoValue")
+                new Cookie("cookieThree", "cookieThreeValueOne")
         ))));
-    }
 
-    @Test
-    public void shouldMatchMatchingStringWithOnlyCookieForEmptyList() {
+        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie("cookieThree", "cookieThreeValueOne")
+        )).matches(new ArrayList<KeyAndValue>()));
+
         assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
-                org.mockserver.model.Not.not(new Cookie("cookieThree", "cookieThreeValueOne"))
+                Not.not(new Cookie("cookieThree", "cookieThreeValueOne"))
         )).matches(new ArrayList<KeyAndValue>()));
     }
 
     @Test
-    public void shouldNotMatchMatchingStringWithNotCookieAndNormalCookie() {
+    public void shouldNotMatchMatchingCookieWithNotCookieAndNormalCookie() {
         assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
                 new Cookie("cookieOneName", "cookieOneValue"),
-                org.mockserver.model.Not.not(new Cookie("cookieTwoName", "cookieTwoValue")
+                Not.not(new Cookie("cookieTwoName", "cookieTwoValue")
                 ))).matches(new ArrayList<KeyAndValue>(Arrays.asList(
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
@@ -79,9 +186,10 @@ public class CookieMatcherTest {
     }
 
     @Test
-    public void shouldNotMatchMatchingStringWithOnlyNotCookie() {
-        assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
-                org.mockserver.model.Not.not(new Cookie("cookieTwoName", "cookieTwoValue")
+    public void shouldNotMatchMatchingCookieWithOnlyNotCookie() {
+        assertFalse(
+                new HashMapMatcher(KeyAndValue.toHashMap(
+                Not.not(new Cookie("cookie.*", "cookie.*")
                 ))).matches(new ArrayList<KeyAndValue>(Arrays.asList(
                 new Cookie("cookieOneName", "cookieOneValue"),
                 new Cookie("cookieTwoName", "cookieTwoValue")
@@ -89,9 +197,9 @@ public class CookieMatcherTest {
     }
 
     @Test
-    public void shouldNotMatchMatchingStringWithOnlyNotCookieForBodyWithSingleCookie() {
+    public void shouldNotMatchMatchingCookieWithOnlyNotCookieForBodyWithSingleCookie() {
         assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
-                org.mockserver.model.Not.not(new Cookie("cookieTwoName", "cookieTwoValue")
+                Not.not(new Cookie("cookieTwoName", "cookieTwoValue")
                 ))).matches(new ArrayList<KeyAndValue>(Arrays.asList(
                 new Cookie("cookieTwoName", "cookieTwoValue")
         ))));

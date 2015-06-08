@@ -1,5 +1,10 @@
 package org.mockserver.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author jamesdbloom
  */
@@ -22,6 +27,18 @@ public class NottableString extends Not {
 
     public static NottableString not(String value) {
         return new NottableString(value, Boolean.TRUE);
+    }
+
+    public static List<NottableString> strings(String... values) {
+        return strings(Arrays.asList(values));
+    }
+
+    public static List<NottableString> strings(Collection<String> values) {
+        List<NottableString> nottableValues = new ArrayList<NottableString>();
+        for (String value : values) {
+            nottableValues.add(string(value));
+        }
+        return nottableValues;
     }
 
     public String getValue() {

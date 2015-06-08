@@ -8,69 +8,27 @@ import java.util.*;
 import static org.mockserver.model.NottableString.string;
 
 /**
- * Map that uses case insensitive regex expression matching for keys
+ * Map that uses case insensitive regex expression matching for keys and values
  *
  * @author jamesdbloom
  */
-public class CaseInsensitiveRegexHashMap<V> extends LinkedHashMap<NottableString, V> implements Map<NottableString, V> {
-    static final long serialVersionUID = 1530623482381786485L;
-
-    public boolean containsAll(CaseInsensitiveRegexHashMap<String> subSet) {
-        for (NottableString subSetKey : subSet.keySet()) {
-            if (!containsKey(subSetKey)) { // check if sub-set key exists in super-set
-                return false;
-            } else { // check if sub-set value matches at least one super-set value using regex
-                for (String subSetValue : subSet.getAll(subSetKey)) {
-                    if (!containsKeyValue(subSetKey, subSetValue)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    public synchronized boolean containsKeyValue(NottableString key, String value) {
-        boolean result = false;
-
-        outermost:
-        for (NottableString matcherKey : keySet()) {
-            for (Object matcherKeyValue : getAll(matcherKey)) {
-                if (matcherKeyValue instanceof String) {
-                    if (RegexStringMatcher.matches(matcherKey.getValue(), key.getValue(), true) && RegexStringMatcher.matches(value, (String) matcherKeyValue, false)) {
-                        result = true;
-                        break outermost;
-                    }
-                }
-            }
-        }
-
-        return key.isNot() != result;
-    }
-
-    public synchronized V put(String key, V value) {
-        return super.put(string(key), value);
-    }
+class CaseInsensitiveNottableRegexListHashMap extends LinkedHashMap<NottableString, List<NottableString>> implements Map<NottableString, List<NottableString>> {
 
     @Override
     public synchronized boolean containsKey(Object key) {
         boolean result = false;
 
         if (key instanceof NottableString) {
-            NottableString nottableString = (NottableString) key;
             if (super.containsKey(key)) {
-                return true;
+                result = true;
             } else {
                 for (NottableString keyToCompare : keySet()) {
-                    if (RegexStringMatcher.matches(nottableString.getValue(), keyToCompare.getValue(), true)) {
+                    if (RegexStringMatcher.matches(((NottableString) key), keyToCompare, true)) {
                         result = true;
                         break;
                     }
                 }
             }
-
-            result = nottableString.isNot() != result;
-
         } else if (key instanceof String) {
             result = containsKey(string((String) key));
         }
@@ -79,7 +37,7 @@ public class CaseInsensitiveRegexHashMap<V> extends LinkedHashMap<NottableString
     }
 
     @Override
-    public synchronized V get(Object key) {
+    public synchronized List<NottableString> get(Object key) {
         if (key instanceof NottableString) {
             if (super.get(key) != null) {
                 return super.get(key);
@@ -97,8 +55,8 @@ public class CaseInsensitiveRegexHashMap<V> extends LinkedHashMap<NottableString
         return null;
     }
 
-    public synchronized Collection<V> getAll(Object key) {
-        List<V> values = new ArrayList<V>();
+    public synchronized Collection<List<NottableString>> getAll(Object key) {
+        List<List<NottableString>> values = new ArrayList<List<NottableString>>();
         if (key instanceof NottableString) {
             NottableString nottableString = (NottableString) key;
             for (NottableString keyToCompare : keySet()) {
@@ -112,8 +70,12 @@ public class CaseInsensitiveRegexHashMap<V> extends LinkedHashMap<NottableString
         return values;
     }
 
+    public synchronized List<NottableString> put(String key, List<NottableString> value) {
+        return super.put(string(key), value);
+    }
+
     @Override
-    public synchronized V remove(Object key) {
+    public synchronized List<NottableString> remove(Object key) {
         if (key instanceof NottableString) {
             if (super.get(key) != null) {
                 return super.remove(key);

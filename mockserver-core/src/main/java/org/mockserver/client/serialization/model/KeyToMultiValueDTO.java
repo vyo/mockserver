@@ -1,6 +1,7 @@
 package org.mockserver.client.serialization.model;
 
 import org.mockserver.model.KeyToMultiValue;
+import org.mockserver.model.NottableString;
 
 import java.util.List;
 
@@ -8,8 +9,8 @@ import java.util.List;
  * @author jamesdbloom
  */
 public class KeyToMultiValueDTO extends NotDTO {
-    private String name;
-    private List<String> values;
+    private NottableString name;
+    private List<NottableString> values;
 
     protected KeyToMultiValueDTO(KeyToMultiValue keyToMultiValue, Boolean not) {
         super(not);
@@ -20,11 +21,11 @@ public class KeyToMultiValueDTO extends NotDTO {
     protected KeyToMultiValueDTO() {
     }
 
-    public String getName() {
+    public NottableString getName() {
         return name;
     }
 
-    public List<String> getValues() {
+    public List<NottableString> getValues() {
         return values;
     }
 }

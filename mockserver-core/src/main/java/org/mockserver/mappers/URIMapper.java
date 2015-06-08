@@ -1,6 +1,7 @@
 package org.mockserver.mappers;
 
 import org.mockserver.model.HttpRequest;
+import org.mockserver.model.NottableString;
 import org.mockserver.model.Parameter;
 
 import java.util.List;
@@ -19,9 +20,9 @@ public class URIMapper {
                 queryString.append(parameter.getName());
                 queryString.append('=');
             } else {
-                List<String> values = parameter.getValues();
+                List<NottableString> values = parameter.getValues();
                 for (int j = 0; j < values.size(); j++) {
-                    String value = values.get(j);
+                    String value = values.get(j).getValue();
                     queryString.append(parameter.getName());
                     queryString.append('=');
                     queryString.append(value);

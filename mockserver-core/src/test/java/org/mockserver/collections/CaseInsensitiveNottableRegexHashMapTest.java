@@ -12,12 +12,12 @@ import static org.mockserver.test.Assert.assertSameEntries;
 /**
  * @author jamesdbloom
  */
-public class CaseInsensitiveRegexHashMapTest {
+public class CaseInsensitiveNottableRegexHashMapTest {
 
     @Test
     public void shouldFindKeyUsingRegex() {
         // when
-        CaseInsensitiveRegexHashMap<String> caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
         caseInsensitiveRegexHashMap.put("key", "valueOne");
         caseInsensitiveRegexHashMap.put("key.*", "valueTwo");
         caseInsensitiveRegexHashMap.put(".*key", "valueThree");
@@ -38,7 +38,7 @@ public class CaseInsensitiveRegexHashMapTest {
     @Test
     public void shouldFindKeyIgnoringCase() {
         // when
-        CaseInsensitiveRegexHashMap<String> caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
         caseInsensitiveRegexHashMap.put("key", "valueOne");
         caseInsensitiveRegexHashMap.put("KEY", "valueTwo");
         caseInsensitiveRegexHashMap.put("Key", "valueThree");
@@ -59,76 +59,76 @@ public class CaseInsensitiveRegexHashMapTest {
     @Test
     public void shouldGetValueUsingRegex() {
         // when
-        CaseInsensitiveRegexHashMap<String> caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
         caseInsensitiveRegexHashMap.put("key", "valueOne");
         caseInsensitiveRegexHashMap.put("key.*", "valueTwo");
         caseInsensitiveRegexHashMap.put(".*key", "valueThree");
         caseInsensitiveRegexHashMap.put(".*key.*", "valueFour");
 
         // then
-        assertEquals("valueOne", caseInsensitiveRegexHashMap.get("key"));
-        assertEquals("valueTwo", caseInsensitiveRegexHashMap.get("key End"));
-        assertEquals("valueThree", caseInsensitiveRegexHashMap.get("Beginning key"));
-        assertEquals("valueFour", caseInsensitiveRegexHashMap.get("Beginning key End"));
+        assertEquals(string("valueOne"), caseInsensitiveRegexHashMap.get("key"));
+        assertEquals(string("valueTwo"), caseInsensitiveRegexHashMap.get("key End"));
+        assertEquals(string("valueThree"), caseInsensitiveRegexHashMap.get("Beginning key"));
+        assertEquals(string("valueFour"), caseInsensitiveRegexHashMap.get("Beginning key End"));
     }
 
     @Test
     public void shouldGetValueIgnoringCase() {
         // when
-        CaseInsensitiveRegexHashMap<String> caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
         caseInsensitiveRegexHashMap.put("key", "valueOne");
         caseInsensitiveRegexHashMap.put("KEY", "valueTwo");
         caseInsensitiveRegexHashMap.put("Key", "valueThree");
         caseInsensitiveRegexHashMap.put("OtherKey", "valueFour");
 
         // then
-        assertEquals("valueOne", caseInsensitiveRegexHashMap.get("key"));
-        assertEquals("valueTwo", caseInsensitiveRegexHashMap.get("KEY"));
-        assertEquals("valueThree", caseInsensitiveRegexHashMap.get("Key"));
-        assertEquals("valueFour", caseInsensitiveRegexHashMap.get("OtherKey"));
+        assertEquals(string("valueOne"), caseInsensitiveRegexHashMap.get("key"));
+        assertEquals(string("valueTwo"), caseInsensitiveRegexHashMap.get("KEY"));
+        assertEquals(string("valueThree"), caseInsensitiveRegexHashMap.get("Key"));
+        assertEquals(string("valueFour"), caseInsensitiveRegexHashMap.get("OtherKey"));
     }
 
     @Test
     public void shouldGetAllValuesUsingRegex() {
         // when
-        CaseInsensitiveRegexHashMap<String> caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
         caseInsensitiveRegexHashMap.put("key", "valueOne");
         caseInsensitiveRegexHashMap.put("key.*", "valueTwo");
         caseInsensitiveRegexHashMap.put(".*key", "valueThree");
         caseInsensitiveRegexHashMap.put(".*key.*", "valueFour");
 
         // then
-        assertSameEntries(Arrays.asList("valueOne", "valueTwo", "valueThree", "valueFour"), caseInsensitiveRegexHashMap.getAll("key"));
-        assertSameEntries(Arrays.asList("valueTwo", "valueFour"), caseInsensitiveRegexHashMap.getAll("key End"));
-        assertSameEntries(Arrays.asList("valueThree", "valueFour"), caseInsensitiveRegexHashMap.getAll("Beginning key"));
-        assertEquals(Arrays.asList("valueFour"), caseInsensitiveRegexHashMap.getAll("Beginning key End"));
+        assertSameEntries(Arrays.asList(string("valueOne"), string("valueTwo"), string("valueThree"), string("valueFour")), caseInsensitiveRegexHashMap.getAll("key"));
+        assertSameEntries(Arrays.asList(string("valueTwo"), string("valueFour")), caseInsensitiveRegexHashMap.getAll("key End"));
+        assertSameEntries(Arrays.asList(string("valueThree"), string("valueFour")), caseInsensitiveRegexHashMap.getAll("Beginning key"));
+        assertSameEntries(Arrays.asList(string("valueFour")), caseInsensitiveRegexHashMap.getAll("Beginning key End"));
     }
 
     @Test
     public void shouldGetAllValuesIgnoringCase() {
         // when
-        CaseInsensitiveRegexHashMap<String> caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
         caseInsensitiveRegexHashMap.put("key", "valueOne");
         caseInsensitiveRegexHashMap.put("KEY", "valueTwo");
         caseInsensitiveRegexHashMap.put("Key", "valueThree");
         caseInsensitiveRegexHashMap.put("OtherKey", "valueFour");
 
         // then
-        assertSameEntries(Arrays.asList("valueOne", "valueTwo", "valueThree"), caseInsensitiveRegexHashMap.getAll("key"));
-        assertSameEntries(Arrays.asList("valueOne", "valueTwo", "valueThree"), caseInsensitiveRegexHashMap.getAll("KEY"));
-        assertSameEntries(Arrays.asList("valueOne", "valueTwo", "valueThree"), caseInsensitiveRegexHashMap.getAll("Key"));
-        assertEquals(Arrays.asList("valueFour"), caseInsensitiveRegexHashMap.getAll("OtherKey"));
+        assertSameEntries(Arrays.asList(string("valueOne"), string("valueTwo"), string("valueThree")), caseInsensitiveRegexHashMap.getAll("key"));
+        assertSameEntries(Arrays.asList(string("valueOne"), string("valueTwo"), string("valueThree")), caseInsensitiveRegexHashMap.getAll("KEY"));
+        assertSameEntries(Arrays.asList(string("valueOne"), string("valueTwo"), string("valueThree")), caseInsensitiveRegexHashMap.getAll("Key"));
+        assertSameEntries(Arrays.asList(string("valueFour")), caseInsensitiveRegexHashMap.getAll("OtherKey"));
     }
 
     @Test
     public void shouldSupportRemoving() {
         // given
-        CaseInsensitiveRegexHashMap<String> circularMultiMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap circularMultiMap = new CaseInsensitiveNottableRegexHashMap();
         circularMultiMap.put("one", "one_one");
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("one_one", circularMultiMap.remove("one"));
+        assertEquals(string("one_one"), circularMultiMap.remove("one"));
         assertNull(circularMultiMap.remove("one"));
 
         // then
@@ -144,12 +144,12 @@ public class CaseInsensitiveRegexHashMapTest {
     @Test
     public void shouldSupportRemovingWithRegex() {
         // given
-        CaseInsensitiveRegexHashMap<String> circularMultiMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap circularMultiMap = new CaseInsensitiveNottableRegexHashMap();
         circularMultiMap.put("one", "one_one");
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("one_one", circularMultiMap.remove("o[a-z]{2}"));
+        assertEquals(string("one_one"), circularMultiMap.remove("o[a-z]{2}"));
         assertNull(circularMultiMap.remove("one"));
 
         // then
@@ -165,13 +165,13 @@ public class CaseInsensitiveRegexHashMapTest {
     @Test
     public void shouldSupportRemovingWithCaseInsensitivity() {
         // given
-        CaseInsensitiveRegexHashMap<String> circularMultiMap = new CaseInsensitiveRegexHashMap<String>();
+        CaseInsensitiveNottableRegexHashMap circularMultiMap = new CaseInsensitiveNottableRegexHashMap();
         circularMultiMap.put("one", "one_one");
         circularMultiMap.put("two", "two");
 
         // when
-        assertEquals("one_one", circularMultiMap.remove("ONE"));
-        assertEquals("two", circularMultiMap.remove("Two"));
+        assertEquals(string("one_one"), circularMultiMap.remove("ONE"));
+        assertEquals(string("two"), circularMultiMap.remove("Two"));
 
         // then
         // - should have correct keys
