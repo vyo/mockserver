@@ -1,5 +1,6 @@
-package org.mockserver.collections.multimap.nottable;
+package org.mockserver.collections.multimap.nottablematcher.nottablematched;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 
@@ -13,6 +14,7 @@ import static org.mockserver.model.NottableString.string;
 /**
  * @author jamesdbloom
  */
+@Ignore
 public class CaseInsensitiveRegexMultiMapTestNottableGet {
 
     @Test
