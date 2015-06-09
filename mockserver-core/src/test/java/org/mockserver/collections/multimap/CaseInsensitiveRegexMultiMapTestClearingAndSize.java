@@ -1,6 +1,7 @@
-package org.mockserver.collections;
+package org.mockserver.collections.multimap;
 
 import org.junit.Test;
+import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +29,7 @@ public class CaseInsensitiveRegexMultiMapTestClearingAndSize {
     @Test
     public void shouldReturnSizeWhenEmpty() {
         // when
-        CaseInsensitiveRegexMultiMap multiMap = multiMap();
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(new String[]{});
 
         // then
         assertThat(multiMap.size(), is(0));

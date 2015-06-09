@@ -1,12 +1,12 @@
-package org.mockserver.collections;
+package org.mockserver.collections.multimap;
 
 import org.junit.Test;
+import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.mockserver.collections.CaseInsensitiveRegexMultiMap.multiMap;
 import static org.mockserver.model.NottableString.string;
@@ -19,7 +19,7 @@ public class CaseInsensitiveRegexMultiMapTestPut {
     @Test
     public void shouldPutSingleValueForNewKey() {
         // given
-        CaseInsensitiveRegexMultiMap multiMap = multiMap();
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(new String[]{});
 
         // when
         multiMap.put("keyOne", "keyOne_valueOne");
@@ -62,7 +62,7 @@ public class CaseInsensitiveRegexMultiMapTestPut {
     @Test
     public void shouldPutSingleMultiValueForNewKey() {
         // given
-        CaseInsensitiveRegexMultiMap multiMap = multiMap();
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(new String[]{});
 
         // when
         multiMap.put("keyTwo", Arrays.asList("keyTwo_valueOne", "keyTwo_valueTwo"));

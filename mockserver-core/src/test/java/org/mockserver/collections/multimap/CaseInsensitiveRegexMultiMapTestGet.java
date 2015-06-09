@@ -1,10 +1,10 @@
-package org.mockserver.collections;
+package org.mockserver.collections.multimap;
 
 import org.junit.Test;
+import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.mockserver.collections.CaseInsensitiveRegexMultiMap.multiMap;
 import static org.mockserver.model.NottableString.string;

@@ -27,6 +27,16 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         return multiMap;
     }
 
+    public static CaseInsensitiveRegexMultiMap multiMap(NottableString[]... keyAndValues) {
+        CaseInsensitiveRegexMultiMap multiMap = new CaseInsensitiveRegexMultiMap();
+        for (NottableString[] keyAndValue : keyAndValues) {
+            for (int i = 1; i < keyAndValue.length; i++) {
+                multiMap.put(keyAndValue[0], keyAndValue[i]);
+            }
+        }
+        return multiMap;
+    }
+
     public boolean containsAll(CaseInsensitiveRegexMultiMap subSet) {
         for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
             if (!containsKeyValue(entry.getKey(), entry.getValue())) {
@@ -34,6 +44,10 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
             }
         }
         return true;
+    }
+
+    public synchronized boolean containsKeyValue(String key, String value) {
+        return containsKeyValue(string(key), string(value));
     }
 
     public synchronized boolean containsKeyValue(NottableString key, NottableString value) {
@@ -240,7 +254,7 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         }
     }
 
-    public static ImmutableEntry entry(String key, String value) {
+    public static Entry<NottableString, NottableString> entry(String key, String value) {
         return new ImmutableEntry(key, value);
     }
 

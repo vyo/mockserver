@@ -1,17 +1,10 @@
-package org.mockserver.collections;
+package org.mockserver.collections.multimap;
 
-import com.google.common.collect.Sets;
-import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.mockserver.model.NottableString;
+import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 
-import java.util.Map;
-import java.util.Set;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.Assert.assertEquals;
 import static org.mockserver.collections.CaseInsensitiveRegexMultiMap.entry;
 import static org.mockserver.collections.CaseInsensitiveRegexMultiMap.multiMap;
 import static org.mockserver.model.NottableString.string;
@@ -54,10 +47,10 @@ public class CaseInsensitiveRegexMultiMapTestKeysAndValue {
         );
 
         // then
-        assertEquals(Sets.newHashSet(
+        assertThat(multiMap.entrySet(), containsInAnyOrder(
                 entry("keyOne", "keyOne_valueOne"),
                 entry("keyTwo", "keyTwo_valueOne"),
                 entry("keyTwo", "keyTwo_valueTwo")
-        ), multiMap.entrySet());
+        ));
     }
 }
