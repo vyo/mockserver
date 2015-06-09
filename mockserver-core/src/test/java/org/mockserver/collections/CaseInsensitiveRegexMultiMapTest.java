@@ -114,7 +114,6 @@ public class CaseInsensitiveRegexMultiMapTest {
     }
 
     @Test
-
     public void shouldIndicateWhenEmpty() {
         assertTrue(new CaseInsensitiveRegexMultiMap().isEmpty());
     }
@@ -142,7 +141,6 @@ public class CaseInsensitiveRegexMultiMapTest {
     }
 
     @Test
-
     public void shouldReturnEntrySet() {
         // given
         CaseInsensitiveRegexMultiMap circularMultiMap = new CaseInsensitiveRegexMultiMap();
@@ -156,20 +154,19 @@ public class CaseInsensitiveRegexMultiMapTest {
         // then
         assertEquals(Sets.newHashSet(
                 new CaseInsensitiveRegexMultiMap.ImmutableEntry[]{
-                        circularMultiMap.new ImmutableEntry("one", "one_one"),
-                        circularMultiMap.new ImmutableEntry("one", "one_two"),
-                        circularMultiMap.new ImmutableEntry("one", "one_three"),
-                        circularMultiMap.new ImmutableEntry("two", "two")
+                        new CaseInsensitiveRegexMultiMap.ImmutableEntry("one", "one_one"),
+                        new CaseInsensitiveRegexMultiMap.ImmutableEntry("one", "one_two"),
+                        new CaseInsensitiveRegexMultiMap.ImmutableEntry("one", "one_three"),
+                        new CaseInsensitiveRegexMultiMap.ImmutableEntry("two", "two")
                 }
         ), circularMultiMap.entrySet());
         assertEquals(2, circularMultiMap.size());
     }
 
     @Test
-
     public void shouldCorrectlyConstructAndGetEntryValue() {
         // when
-        CaseInsensitiveRegexMultiMap.ImmutableEntry immutableEntry = new CaseInsensitiveRegexMultiMap().new ImmutableEntry("key", "value");
+        CaseInsensitiveRegexMultiMap.ImmutableEntry immutableEntry = new CaseInsensitiveRegexMultiMap.ImmutableEntry("key", "value");
 
         // then
         assertEquals(immutableEntry.getKey(), string("key"));
@@ -178,7 +175,7 @@ public class CaseInsensitiveRegexMultiMapTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void shouldNotAllowImmutableEntryToBeModified() {
-        new CaseInsensitiveRegexMultiMap().new ImmutableEntry("key", "value").setValue(string("new_value"));
+        new CaseInsensitiveRegexMultiMap.ImmutableEntry("key", "value").setValue(string("new_value"));
     }
 
     @Test

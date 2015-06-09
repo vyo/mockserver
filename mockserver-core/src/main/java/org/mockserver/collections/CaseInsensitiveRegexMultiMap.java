@@ -17,6 +17,16 @@ import static org.mockserver.model.NottableString.strings;
 public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHashCodeToString implements Map<NottableString, NottableString> {
     private final CaseInsensitiveNottableRegexListHashMap backingMap = new CaseInsensitiveNottableRegexListHashMap();
 
+    public static CaseInsensitiveRegexMultiMap multiMap(String[]... keyAndValues) {
+        CaseInsensitiveRegexMultiMap multiMap = new CaseInsensitiveRegexMultiMap();
+        for (String[] keyAndValue : keyAndValues) {
+            for (int i = 1; i < keyAndValue.length; i++) {
+                multiMap.put(keyAndValue[0], keyAndValue[i]);
+            }
+        }
+        return multiMap;
+    }
+
     public boolean containsAll(CaseInsensitiveRegexMultiMap subSet) {
         for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
             if (!containsKeyValue(entry.getKey(), entry.getValue())) {
@@ -134,7 +144,11 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         } else {
             List<NottableString> values = backingMap.get(key);
             if (values != null && values.size() > 0) {
-                return values.remove(0);
+                NottableString removed = values.remove(0);
+                if (values.size() == 0) {
+                    backingMap.remove(key);
+                }
+                return removed;
             } else {
                 return null;
             }
@@ -196,7 +210,7 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         return backingMap.isEmpty();
     }
 
-    class ImmutableEntry extends ObjectWithReflectiveEqualsHashCodeToString implements Entry<NottableString, NottableString> {
+    static class ImmutableEntry extends ObjectWithReflectiveEqualsHashCodeToString implements Entry<NottableString, NottableString> {
         private final NottableString key;
         private final NottableString value;
 
@@ -224,6 +238,10 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         public NottableString setValue(NottableString value) {
             throw new UnsupportedOperationException("ImmutableEntry is immutable");
         }
+    }
+
+    public static ImmutableEntry entry(String key, String value) {
+        return new ImmutableEntry(key, value);
     }
 
 }
