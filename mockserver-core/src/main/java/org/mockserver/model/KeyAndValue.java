@@ -1,6 +1,6 @@
 package org.mockserver.model;
 
-import org.mockserver.collections.CaseInsensitiveNottableRegexHashMap;
+import org.mockserver.collections.CaseInsensitiveRegexHashMap;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +23,8 @@ public class KeyAndValue extends ObjectWithJsonToString {
         this.value = value;
     }
 
-    public static CaseInsensitiveNottableRegexHashMap toHashMap(List<? extends KeyAndValue> keyAndValue) {
-        CaseInsensitiveNottableRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveNottableRegexHashMap();
+    public static CaseInsensitiveRegexHashMap toHashMap(List<? extends KeyAndValue> keyAndValue) {
+        CaseInsensitiveRegexHashMap caseInsensitiveRegexHashMap = new CaseInsensitiveRegexHashMap();
         if (keyAndValue != null) {
             for (KeyAndValue keyToMultiValue : keyAndValue) {
                 caseInsensitiveRegexHashMap.put(keyToMultiValue.getName(), keyToMultiValue.getValue());
@@ -33,7 +33,7 @@ public class KeyAndValue extends ObjectWithJsonToString {
         return caseInsensitiveRegexHashMap;
     }
 
-    public static CaseInsensitiveNottableRegexHashMap toHashMap(KeyAndValue... keyToMultiValues) {
+    public static CaseInsensitiveRegexHashMap toHashMap(KeyAndValue... keyToMultiValues) {
         return toHashMap(Arrays.asList(keyToMultiValues));
     }
 

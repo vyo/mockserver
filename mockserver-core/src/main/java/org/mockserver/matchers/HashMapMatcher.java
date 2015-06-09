@@ -1,6 +1,6 @@
 package org.mockserver.matchers;
 
-import org.mockserver.collections.CaseInsensitiveNottableRegexHashMap;
+import org.mockserver.collections.CaseInsensitiveRegexHashMap;
 import org.mockserver.model.KeyAndValue;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
  * @author jamesdbloom
  */
 public class HashMapMatcher extends NotMatcher<List<KeyAndValue>> {
-    private final CaseInsensitiveNottableRegexHashMap hashMap;
+    private final CaseInsensitiveRegexHashMap hashMap;
 
-    public HashMapMatcher(CaseInsensitiveNottableRegexHashMap hashMap) {
+    public HashMapMatcher(CaseInsensitiveRegexHashMap hashMap) {
         this.hashMap = hashMap;
     }
 

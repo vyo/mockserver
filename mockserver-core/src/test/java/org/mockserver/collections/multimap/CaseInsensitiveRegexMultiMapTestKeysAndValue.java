@@ -43,12 +43,29 @@ public class CaseInsensitiveRegexMultiMapTestKeysAndValue {
         // given
         CaseInsensitiveRegexMultiMap multiMap = multiMap(
                 new String[]{"keyOne", "keyOne_valueOne"},
-                new String[]{"keyTwo", "keyTwo_valueOne", "keyTwo_valueTwo"}
+                new String[]{"keyTwo", "keyTwo_valueOne", "keyTwo_valueOne", "keyTwo_valueTwo"}
         );
 
         // then
         assertThat(multiMap.entrySet(), containsInAnyOrder(
                 entry("keyOne", "keyOne_valueOne"),
+                entry("keyTwo", "keyTwo_valueOne"),
+                entry("keyTwo", "keyTwo_valueTwo")
+        ));
+    }
+
+    @Test
+    public void shouldReturnEntryList() {
+        // given
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(
+                new String[]{"keyOne", "keyOne_valueOne"},
+                new String[]{"keyTwo", "keyTwo_valueOne", "keyTwo_valueOne", "keyTwo_valueTwo"}
+        );
+
+        // then
+        assertThat(multiMap.entryList(), containsInAnyOrder(
+                entry("keyOne", "keyOne_valueOne"),
+                entry("keyTwo", "keyTwo_valueOne"),
                 entry("keyTwo", "keyTwo_valueOne"),
                 entry("keyTwo", "keyTwo_valueTwo")
         ));

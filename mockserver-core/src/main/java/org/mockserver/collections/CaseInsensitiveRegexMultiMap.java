@@ -1,5 +1,6 @@
 package org.mockserver.collections;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.mockserver.matchers.RegexStringMatcher;
 import org.mockserver.model.NottableString;
 import org.mockserver.model.ObjectWithReflectiveEqualsHashCodeToString;
@@ -38,7 +39,7 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
     }
 
     public boolean containsAll(CaseInsensitiveRegexMultiMap subSet) {
-        for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
+        for (Entry<NottableString, NottableString> entry : subSet.entryList()) {
             if (!containsKeyValue(entry.getKey(), entry.getValue())) {
                 return false;
             }
@@ -53,7 +54,7 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
     public synchronized boolean containsKeyValue(NottableString key, NottableString value) {
         boolean result = false;
 
-        for (Entry<NottableString, NottableString> matcherEntry : entrySet()) {
+        for (Entry<NottableString, NottableString> matcherEntry : entryList()) {
             if (RegexStringMatcher.matches(value, matcherEntry.getValue(), true)
                     && RegexStringMatcher.matches(key, matcherEntry.getKey(), true)) {
                 result = true;
@@ -120,8 +121,10 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
     @Override
     public synchronized NottableString put(NottableString key, NottableString value) {
         List<NottableString> list = Collections.synchronizedList(new ArrayList<NottableString>());
-        if (containsKey(key) && backingMap.get(key) != null) {
-            list.addAll(backingMap.get(key));
+        for (Entry<NottableString, NottableString> entry : entryList()) {
+            if (EqualsBuilder.reflectionEquals(entry.getKey(), key)) {
+                list.add(entry.getValue());
+            }
         }
         list.add(value);
         backingMap.put(key, list);
@@ -206,6 +209,15 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
     @Override
     public synchronized Set<Entry<NottableString, NottableString>> entrySet() {
         Set<Entry<NottableString, NottableString>> entrySet = new LinkedHashSet<Entry<NottableString, NottableString>>();
+        for (Entry<NottableString, List<NottableString>> entry : backingMap.entrySet()) {
+            for (NottableString value : entry.getValue()) {
+                entrySet.add(new ImmutableEntry(entry.getKey(), value));
+            }
+        }
+        return entrySet;
+    }
+    public synchronized List<Entry<NottableString, NottableString>> entryList() {
+        List<Entry<NottableString, NottableString>> entrySet = new ArrayList<Entry<NottableString, NottableString>>();
         for (Entry<NottableString, List<NottableString>> entry : backingMap.entrySet()) {
             for (NottableString value : entry.getValue()) {
                 entrySet.add(new ImmutableEntry(entry.getKey(), value));

@@ -105,10 +105,10 @@ public class CaseInsensitiveRegexMultiMapTestNottableRemove {
         multiMap.removeAll(not("keyOne"));
 
         // then
-        assertThat(multiMap.size(), is(2));
+        assertThat(multiMap.size(), is(1));
         assertThat(multiMap.getAll("keyOne"), containsInAnyOrder(string("keyOne_valueOne")));
         assertThat(multiMap.getAll("keyTwo"), empty());
-        assertThat(multiMap.getAll("keyThree"), containsInAnyOrder(string("keyThree_valueOne"), string("keyThree_valueTwo"), string("keyThree_valueThree")));
+        assertThat(multiMap.getAll("keyThree"), empty());
     }
 
     @Test

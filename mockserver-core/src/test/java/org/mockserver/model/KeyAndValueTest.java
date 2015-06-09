@@ -1,7 +1,7 @@
 package org.mockserver.model;
 
 import org.junit.Test;
-import org.mockserver.collections.CaseInsensitiveNottableRegexHashMap;
+import org.mockserver.collections.CaseInsensitiveRegexHashMap;
 
 import java.util.Arrays;
 
@@ -18,7 +18,7 @@ public class KeyAndValueTest {
         Cookie cookie = new Cookie("name", "value");
 
         // when
-        CaseInsensitiveNottableRegexHashMap hashMap = KeyAndValue.toHashMap(cookie);
+        CaseInsensitiveRegexHashMap hashMap = KeyAndValue.toHashMap(cookie);
 
         // then
         assertThat(hashMap.get(string("name")), is(string("value")));
@@ -30,7 +30,7 @@ public class KeyAndValueTest {
         Cookie nottedCookie = new Cookie(not("name"), not("value"));
 
         // when
-        CaseInsensitiveNottableRegexHashMap hashMap = KeyAndValue.toHashMap(nottedCookie);
+        CaseInsensitiveRegexHashMap hashMap = KeyAndValue.toHashMap(nottedCookie);
 
         // then
         assertThat(hashMap.get(not("name")), is(not("value")));
@@ -43,7 +43,7 @@ public class KeyAndValueTest {
         Cookie secondCookie = new Cookie(string("name_two"), string("value_two"));
 
         // when
-        CaseInsensitiveNottableRegexHashMap hashMap = KeyAndValue.toHashMap(
+        CaseInsensitiveRegexHashMap hashMap = KeyAndValue.toHashMap(
                 Arrays.asList(
                         firstNottedCookie,
                         secondCookie

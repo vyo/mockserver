@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
@@ -25,7 +26,7 @@ public class CaseInsensitiveRegexMultiMapTestRemove {
         );
 
         // when
-        multiMap.remove("keyOne");
+        assertThat(multiMap.remove("keyOne"), is(string("keyOne_valueOne")));
 
         // then
         assertThat(multiMap.size(), is(2));
@@ -44,7 +45,7 @@ public class CaseInsensitiveRegexMultiMapTestRemove {
         );
 
         // when
-        multiMap.remove("keyTwo");
+        assertThat(multiMap.remove("keyTwo"), is(string("keyTwo_valueOne")));
 
         // then
         assertThat(multiMap.size(), is(3));
@@ -63,7 +64,7 @@ public class CaseInsensitiveRegexMultiMapTestRemove {
         );
 
         // when
-        multiMap.remove("keyFour");
+        assertThat(multiMap.remove("keyFour"), is(nullValue()));
 
         // then
         assertThat(multiMap.size(), is(3));
@@ -82,7 +83,7 @@ public class CaseInsensitiveRegexMultiMapTestRemove {
         );
 
         // when
-        multiMap.removeAll("keyOne");
+        assertThat(multiMap.removeAll("keyOne"), containsInAnyOrder(string("keyOne_valueOne")));
 
         // then
         assertThat(multiMap.size(), is(2));
@@ -101,7 +102,7 @@ public class CaseInsensitiveRegexMultiMapTestRemove {
         );
 
         // when
-        multiMap.removeAll("keyTwo");
+        assertThat(multiMap.removeAll("keyTwo"), containsInAnyOrder(string("keyTwo_valueOne"), string("keyTwo_valueTwo")));
 
         // then
         assertThat(multiMap.size(), is(2));
@@ -120,7 +121,7 @@ public class CaseInsensitiveRegexMultiMapTestRemove {
         );
 
         // when
-        multiMap.removeAll("keyFour");
+        assertThat(multiMap.removeAll("keyFour"), empty());
 
         // then
         assertThat(multiMap.size(), is(3));
