@@ -36,8 +36,21 @@ public class CaseInsensitiveRegexHashMap extends LinkedHashMap<NottableString, N
     }
 
     public boolean containsAll(CaseInsensitiveRegexHashMap subSet) {
-        for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
-            if (!containsKeyValue(entry.getKey(), entry.getValue())) {
+        if (size() == 0 && subSet.allKeysNotted()) {
+            return true;
+        } else {
+            for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
+                if (!containsKeyValue(entry.getKey(), entry.getValue())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean allKeysNotted() {
+        for (NottableString key : keySet()) {
+            if (!key.isNot()) {
                 return false;
             }
         }

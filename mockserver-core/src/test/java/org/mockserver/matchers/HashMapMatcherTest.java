@@ -2,13 +2,19 @@ package org.mockserver.matchers;
 
 import org.junit.Test;
 import org.mockserver.collections.CaseInsensitiveRegexHashMap;
+import org.mockserver.model.Cookie;
 import org.mockserver.model.KeyAndValue;
+import org.mockserver.model.NottableString;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockserver.collections.CaseInsensitiveRegexHashMap.hashMap;
+import static org.mockserver.model.NottableString.not;
+import static org.mockserver.model.NottableString.string;
 
 public class HashMapMatcherTest {
 
@@ -38,6 +44,43 @@ public class HashMapMatcherTest {
                 new KeyAndValue("keyTwo", "keyTwoValue"),
                 new KeyAndValue("keyThree", "keyThreeValue")
         )), is(true));
+    }
+
+    @Test
+    public void shouldMatchEmptyKeyAndValueForMatcherWithOnlySingleNottedKey() {
+        // given
+        HashMapMatcher hashMapMatcher = new HashMapMatcher(hashMap(
+                new NottableString[]{not("keyOne"), string("keyOneValue")}
+        ));
+
+        // then
+        assertThat(hashMapMatcher.matches(Arrays.<KeyAndValue>asList()), is(true));
+    }
+
+    @Test
+    public void shouldMatchEmptyKeyAndValueForMatcherWithOnlyMultipleNottedKeys() {
+        // given
+        HashMapMatcher hashMapMatcher = new HashMapMatcher(hashMap(
+                new NottableString[]{not("keyOne"), string("keyOneValue")},
+                new NottableString[]{not("keyTwo"), string("keyTwoValue")},
+                new NottableString[]{not("keyThree"), string("keyThreeValue")}
+        ));
+
+        // then
+        assertThat(hashMapMatcher.matches(Arrays.<KeyAndValue>asList()), is(true));
+    }
+
+    @Test
+    public void shouldNotMatchEmptyKeyAndValueForMatcherWithOnlyAtLeastOneNotNottedKey() {
+        // given
+        HashMapMatcher hashMapMatcher = new HashMapMatcher(hashMap(
+                new NottableString[]{not("keyOne"), string("keyOneValue")},
+                new NottableString[]{not("keyTwo"), string("keyTwoValue")},
+                new NottableString[]{string("keyThree"), string("keyThreeValue")}
+        ));
+
+        // then
+        assertThat(hashMapMatcher.matches(Arrays.<KeyAndValue>asList()), is(false));
     }
 
     @Test
