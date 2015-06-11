@@ -2,11 +2,13 @@ package org.mockserver.collections.multimap.nottablematcher;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockserver.collections.CaseInsensitiveRegexHashMap;
 import org.mockserver.collections.CaseInsensitiveRegexMultiMap;
 import org.mockserver.model.NottableString;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockserver.collections.CaseInsensitiveRegexHashMap.hashMap;
 import static org.mockserver.collections.CaseInsensitiveRegexMultiMap.multiMap;
 import static org.mockserver.model.NottableString.not;
 import static org.mockserver.model.NottableString.string;
@@ -490,6 +492,35 @@ public class CaseInsensitiveRegexMultiMapTestNottableContainsAll {
     }
 
     @Test
+    public void shouldContainAllEmptySubSetMultipleKeyAndMultipleValuesForNottedKeyAndValue() {
+        // given
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(
+                new NottableString[]{string("keyOne"), string("keyOneValue")},
+                new NottableString[]{not("keyTwo"), not("keyTwoValue")},
+                new NottableString[]{string("keyThree"), string("keyThreeValue"), string("keyThree_valueTwo")}
+        );
+
+        // then
+        assertThat(multiMap.containsAll(multiMap(
+                new NottableString[]{}
+        )), is(true));
+    }
+
+    @Test
+    public void shouldContainAllSubSetMultipleKeyForEmptyMap() {
+        // given
+        CaseInsensitiveRegexHashMap hashMap = hashMap(
+                new NottableString[]{}
+        );
+
+        // then
+        assertThat(hashMap.containsAll(hashMap(
+                new NottableString[]{not("keyOne"), string("keyOneValue")},
+                new NottableString[]{not("keyTwo"), string("keyTwoValue")}
+        )), is(true));
+    }
+
+    @Test
     public void shouldNotContainAllNotMatchSingleKeySingleEntry() {
         // given
         CaseInsensitiveRegexMultiMap multiMap = multiMap(
@@ -605,6 +636,34 @@ public class CaseInsensitiveRegexMultiMapTestNottableContainsAll {
         )), is(false));
         assertThat(multiMap.containsAll(multiMap(
                 new NottableString[]{string("keyTwo"), string("keyTwo.*")}
+        )), is(false));
+    }
+
+    @Test
+    public void shouldNotContainAllNotMatchMultipleValuesMultipleEntriesContradiction() {
+        // given
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(
+                new NottableString[]{string("keyOne"), string("keyOneValue")}
+        );
+
+        // then
+        assertThat(multiMap.containsAll(multiMap(
+                new NottableString[]{string("keyOne"), string("keyOneValue")},
+                new NottableString[]{not("keyOne"), not("keyOneValue")}
+        )), is(false));
+    }
+
+    @Test
+    public void shouldNotContainAllSubSetMultipleKeyForEmptyMap() {
+        // given
+        CaseInsensitiveRegexMultiMap multiMap = multiMap(
+                new NottableString[]{}
+        );
+
+        // then
+        assertThat(multiMap.containsAll(multiMap(
+                new NottableString[]{not("keyOne"), string("keyOneValue")},
+                new NottableString[]{string("keyTwo"), string("keyTwoValue")}
         )), is(false));
     }
 }

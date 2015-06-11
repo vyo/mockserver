@@ -40,7 +40,9 @@ public class NottableStringDeserializer extends JsonDeserializer<NottableString>
 
             return string(string, not);
         } else if (jp.getCurrentToken() == JsonToken.VALUE_STRING) {
-            return string(jp.readValueAs(String.class));
+            String value = jp.readValueAs(String.class);
+            boolean isNot = value.startsWith("!");
+            return string(value.replaceFirst("^!", ""), isNot);
         }
         return null;
     }

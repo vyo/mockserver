@@ -40,7 +40,7 @@ import static org.mockserver.model.HttpResponse.notFoundResponse;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.JsonBody.json;
 import static org.mockserver.model.JsonSchemaBody.jsonSchema;
-import static org.mockserver.model.Not.not;
+import static org.mockserver.model.NottableString.not;
 import static org.mockserver.model.OutboundHttpRequest.outboundRequest;
 import static org.mockserver.model.Parameter.param;
 import static org.mockserver.model.ParameterBody.params;
@@ -1814,7 +1814,7 @@ public abstract class AbstractClientServerIntegrationTest {
         mockServerClient
                 .when(
                         request()
-                                .withPath(NottableString.not(calculatePath("some_path")))
+                                .withPath(not(calculatePath("some_path")))
                 )
                 .respond(
                         response()
@@ -1853,7 +1853,7 @@ public abstract class AbstractClientServerIntegrationTest {
         mockServerClient
                 .when(
                         request()
-                                .withMethod(NottableString.not("GET"))
+                                .withMethod(not("GET"))
                 )
                 .respond(
                         response()
@@ -2540,7 +2540,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("POST")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withBody(params(
-                                        not(param("bodyParameterOneName", "Parameter One Value One", "Parameter One Value Two")),
+                                        param(not("bodyParameterOneName"), not("Parameter One Value One"), not("Parameter One Value Two")),
                                         param("bodyParameterTwoName", "Parameter Two")
                                 ))
                 )
@@ -2597,7 +2597,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("POST")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withQueryStringParameters(
-                                        not(param("queryStringParameterOneName", "Parameter One Value One", "Parameter One Value Two")),
+                                        param(not("queryStringParameterOneName"), not("Parameter One Value One"), not("Parameter One Value Two")),
                                         param("queryStringParameterTwoName", "Parameter Two")
                                 )
                 )
@@ -2651,7 +2651,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("GET")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withCookies(
-                                        cookie(NottableString.not("OTHERrequestCookieNameOne"), NottableString.not("requestCookieValueOne")),
+                                        cookie(not("OTHERrequestCookieNameOne"), not("requestCookieValueOne")),
                                         cookie("requestCookieNameTwo", "requestCookieValueTwo")
                                 )
                 )
@@ -2705,7 +2705,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("GET")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withHeaders(
-                                        not(header("OTHERrequestHeaderNameOne", "requestHeaderValueOne")),
+                                        header(not("OTHERrequestHeaderNameOne"), not("requestHeaderValueOne")),
                                         header("requestHeaderNameTwo", "requestHeaderValueTwo")
                                 )
                 )
@@ -2868,7 +2868,7 @@ public abstract class AbstractClientServerIntegrationTest {
         mockServerClient
                 .when(
                         request()
-                                .withBody(not(json("{" + System.getProperty("line.separator") +
+                                .withBody(Not.not(json("{" + System.getProperty("line.separator") +
                                         "    \"id\": 1," + System.getProperty("line.separator") +
                                         "    \"name\": \"A green door\"," + System.getProperty("line.separator") +
                                         "    \"price\": 12.50," + System.getProperty("line.separator") +
@@ -3246,7 +3246,7 @@ public abstract class AbstractClientServerIntegrationTest {
         mockServerClient
                 .when(
                         request()
-                                .withPath(NottableString.not(calculatePath("some_path")))
+                                .withPath(not(calculatePath("some_path")))
                 )
                 .respond(
                         response()
@@ -3283,7 +3283,7 @@ public abstract class AbstractClientServerIntegrationTest {
         mockServerClient
                 .when(
                         request()
-                                .withMethod(NottableString.not("GET"))
+                                .withMethod(not("GET"))
                 )
                 .respond(
                         response()
@@ -3380,7 +3380,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("POST")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withBody(params(
-                                        not(param("bodyParameterOneName", "Parameter One Value One", "Parameter One Value Two")),
+                                        param(not("bodyParameterOneName"), not("Parameter One Value One"), not("Parameter One Value Two")),
                                         param("bodyParameterTwoName", "Parameter Two")
                                 ))
                 )
@@ -3580,7 +3580,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("POST")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withQueryStringParameters(
-                                        not(param("queryStringParameterOneName", "Parameter One Value One", "Parameter One Value Two")),
+                                        param(not("queryStringParameterOneName"), not("Parameter One Value One"), not("Parameter One Value Two")),
                                         param("queryStringParameterTwoName", "Parameter Two")
                                 )
                 )
@@ -3760,7 +3760,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("GET")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withCookies(
-                                        cookie(NottableString.not("requestCookieNameOne"), NottableString.not("requestCookieValueOne")),
+                                        cookie(not("requestCookieNameOne"), not("requestCookieValueOne")),
                                         cookie("requestCookieNameTwo", "requestCookieValueTwo")
                                 )
                 )
@@ -3940,7 +3940,7 @@ public abstract class AbstractClientServerIntegrationTest {
                                 .withMethod("GET")
                                 .withPath(calculatePath("some_pathRequest"))
                                 .withHeaders(
-                                        not(header("requestHeaderNameOne", "requestHeaderValueOne")),
+                                        header(not("requestHeaderNameOne"), not("requestHeaderValueOne")),
                                         header("requestHeaderNameTwo", "requestHeaderValueTwo")
                                 )
                 )
