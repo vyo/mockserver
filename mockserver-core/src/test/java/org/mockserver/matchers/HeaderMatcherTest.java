@@ -3,14 +3,14 @@ package org.mockserver.matchers;
 import org.junit.Test;
 import org.mockserver.model.Header;
 import org.mockserver.model.KeyToMultiValue;
-import org.mockserver.model.Not;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockserver.matchers.NotMatcher.not;
+import static org.mockserver.model.NottableString.not;
 
 /**
  * @author jamesdbloom
@@ -47,7 +47,7 @@ public class HeaderMatcherTest {
         ))));
 
         // then - not matcher
-        assertFalse(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertFalse(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
@@ -58,16 +58,16 @@ public class HeaderMatcherTest {
         // and - not header
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
-                Not.not(new Header("headerTwoName", "headerTwoValue"))
+                new Header(not("headerTwoName"), not("headerTwoValue"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))));
 
         // and - not matcher and not header
-        assertTrue(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertTrue(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
-                Not.not(new Header("headerTwoName", "headerTwoValue"))
+                new Header(not("headerTwoName"), not("headerTwoValue"))
         ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -79,7 +79,7 @@ public class HeaderMatcherTest {
         // not matching header
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
-                Not.not(new Header("headerTwoName", "headerTwoValue"))
+                new Header(not("headerTwoName"), not("headerTwoValue"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -89,7 +89,7 @@ public class HeaderMatcherTest {
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue"),
-                Not.not(new Header("headerThree", "headerThreeValueOne"))
+                new Header(not("headerThree"), not("headerThreeValueOne"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -97,7 +97,7 @@ public class HeaderMatcherTest {
 
         // not only header
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("headerThree", "headerThreeValueOne"))
+                new Header(not("headerThree"), not("headerThreeValueOne"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -105,7 +105,7 @@ public class HeaderMatcherTest {
 
         // not all headers (but matching)
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("header.*", ".*"))
+                new Header(not("header.*"), not(".*"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -113,7 +113,7 @@ public class HeaderMatcherTest {
 
         // not all headers (but not matching name)
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("header.*", "header.*"))
+                new Header(not("header.*"), not("header.*"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("notHeaderOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("notHeaderTwoName", "headerTwoValue")
@@ -121,7 +121,7 @@ public class HeaderMatcherTest {
 
         // not all headers (but not matching value)
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("header.*", "header.*"))
+                new Header(not("header.*"), not("header.*"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "notHeaderOneValueOne", "notHeaderOneValueTwo"),
                 new Header("headerTwoName", "notHeaderTwoValue")
@@ -131,7 +131,7 @@ public class HeaderMatcherTest {
     @Test
     public void shouldMatchMatchingHeaderWithOnlyHeader() {
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("headerThree", "headerThreeValueOne"))
+                new Header(not("headerThree"), not("headerThreeValueOne"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -144,7 +144,7 @@ public class HeaderMatcherTest {
         ))));
 
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"))
+                new Header(not("headerOneName"), not("headerOneValueOne"), not("headerOneValueTwo"))
         )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
@@ -161,7 +161,7 @@ public class HeaderMatcherTest {
     public void shouldMatchMatchingHeaderWithOnlyHeaderForEmptyList() {
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new ArrayList<KeyToMultiValue>()
-        )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+        )).matches(new ArrayList<KeyToMultiValue>(Collections.singletonList(
                 new Header("headerThree", "headerThreeValueOne")
         ))));
 
@@ -170,7 +170,7 @@ public class HeaderMatcherTest {
         )).matches(new ArrayList<KeyToMultiValue>()));
 
         assertTrue(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("headerThree", "headerThreeValueOne"))
+                new Header(not("headerThree"), not("headerThreeValueOne"))
         )).matches(new ArrayList<KeyToMultiValue>()));
     }
 
@@ -178,8 +178,8 @@ public class HeaderMatcherTest {
     public void shouldNotMatchMatchingHeaderWithNotHeaderAndNormalHeader() {
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
-                Not.not(new Header("headerTwoName", "headerTwoValue")
-                ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+                new Header(not("headerTwoName"), not("headerTwoValue"))
+        )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))));
@@ -188,8 +188,8 @@ public class HeaderMatcherTest {
     @Test
     public void shouldNotMatchMatchingHeaderWithOnlyNotHeader() {
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("headerTwoName", "headerTwoValue")
-                ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+                new Header(not("headerTwoName"), not("headerTwoValue"))
+        )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))));
@@ -198,8 +198,8 @@ public class HeaderMatcherTest {
     @Test
     public void shouldNotMatchMatchingHeaderWithOnlyNotHeaderForBodyWithSingleHeader() {
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
-                Not.not(new Header("headerTwoName", "headerTwoValue")
-                ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+                new Header(not("headerTwoName"), not("headerTwoValue"))
+        )).matches(new ArrayList<KeyToMultiValue>(Collections.singletonList(
                 new Header("headerTwoName", "headerTwoValue")
         ))));
     }
@@ -214,10 +214,11 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldNotMatchNullExpectationWhenNotApplied() {
-        assertFalse(not(new MultiValueMapMatcher(null)).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
-                new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
-                new Header("headerTwoName", "headerTwoValue")
-        ))));
+        assertFalse(NotMatcher.not(new MultiValueMapMatcher(null))
+                .matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+                        new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
+                        new Header("headerTwoName", "headerTwoValue")
+                ))));
     }
 
     @Test
@@ -229,11 +230,13 @@ public class HeaderMatcherTest {
     }
 
     @Test
+
     public void shouldNotMatchEmptyExpectationWhenNotApplied() {
-        assertFalse(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap())).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
-                new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
-                new Header("headerTwoName", "headerTwoValue")
-        ))));
+        assertFalse(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap()))
+                .matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+                        new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
+                        new Header("headerTwoName", "headerTwoValue")
+                ))));
     }
 
     @Test
@@ -249,7 +252,7 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldMatchIncorrectHeaderNameWhenNotApplied() {
-        assertTrue(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertTrue(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
@@ -271,7 +274,7 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldMatchIncorrectHeaderValueWhenNotApplied() {
-        assertTrue(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertTrue(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
@@ -293,7 +296,7 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldMatchIncorrectHeaderNameAndValueWhenNotApplied() {
-        assertTrue(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertTrue(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
@@ -315,7 +318,7 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldMatchNullHeaderValueWhenNotApplied() {
-        assertTrue(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertTrue(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
         ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
@@ -340,17 +343,17 @@ public class HeaderMatcherTest {
         assertFalse(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
-        )).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+        )).matches(new ArrayList<KeyToMultiValue>(Collections.singletonList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo")
         ))));
     }
 
     @Test
     public void shouldMatchMissingHeaderWhenNotApplied() {
-        assertTrue(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
+        assertTrue(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo"),
                 new Header("headerTwoName", "headerTwoValue")
-        ))).matches(new ArrayList<KeyToMultiValue>(Arrays.asList(
+        ))).matches(new ArrayList<KeyToMultiValue>(Collections.singletonList(
                 new Header("headerOneName", "headerOneValueOne", "headerOneValueTwo")
         ))));
     }
@@ -362,7 +365,7 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldNotMatchNullTestWhenNotApplied() {
-        assertFalse(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap())).matches(null));
+        assertFalse(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap())).matches(null));
     }
 
     @Test
@@ -372,6 +375,6 @@ public class HeaderMatcherTest {
 
     @Test
     public void shouldNotMatchEmptyTestWhenNotApplied() {
-        assertFalse(not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap())).matches(new ArrayList<KeyToMultiValue>()));
+        assertFalse(NotMatcher.not(new MultiValueMapMatcher(KeyToMultiValue.toMultiMap())).matches(new ArrayList<KeyToMultiValue>()));
     }
 }

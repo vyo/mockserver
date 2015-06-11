@@ -39,8 +39,23 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
     }
 
     public boolean containsAll(CaseInsensitiveRegexMultiMap subSet) {
-        for (Entry<NottableString, NottableString> entry : subSet.entryList()) {
-            if (!containsKeyValue(entry.getKey(), entry.getValue())) {
+        if (size() == 0 && subSet.allKeysNotted()) {
+            return true;
+        } else {
+            for (Entry<NottableString, NottableString> entry : subSet.entryList()) {
+                if (entry.getKey().isNot() && containsKey(entry.getKey().getValue())) {
+                    return false;
+                } else if (!containsKeyValue(entry.getKey(), entry.getValue())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean allKeysNotted() {
+        for (NottableString key : keySet()) {
+            if (!key.isNot()) {
                 return false;
             }
         }
@@ -216,6 +231,7 @@ public class CaseInsensitiveRegexMultiMap extends ObjectWithReflectiveEqualsHash
         }
         return entrySet;
     }
+
     public synchronized List<Entry<NottableString, NottableString>> entryList() {
         List<Entry<NottableString, NottableString>> entrySet = new ArrayList<Entry<NottableString, NottableString>>();
         for (Entry<NottableString, List<NottableString>> entry : backingMap.entrySet()) {

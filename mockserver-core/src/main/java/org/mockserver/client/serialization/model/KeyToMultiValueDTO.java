@@ -2,18 +2,18 @@ package org.mockserver.client.serialization.model;
 
 import org.mockserver.model.KeyToMultiValue;
 import org.mockserver.model.NottableString;
+import org.mockserver.model.ObjectWithReflectiveEqualsHashCodeToString;
 
 import java.util.List;
 
 /**
  * @author jamesdbloom
  */
-public class KeyToMultiValueDTO extends NotDTO {
+public class KeyToMultiValueDTO extends ObjectWithReflectiveEqualsHashCodeToString {
     private NottableString name;
     private List<NottableString> values;
 
-    protected KeyToMultiValueDTO(KeyToMultiValue keyToMultiValue, Boolean not) {
-        super(not);
+    protected KeyToMultiValueDTO(KeyToMultiValue keyToMultiValue) {
         name = keyToMultiValue.getName();
         values = keyToMultiValue.getValues();
     }

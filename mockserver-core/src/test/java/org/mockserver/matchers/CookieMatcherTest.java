@@ -154,6 +154,13 @@ public class CookieMatcherTest {
                 new Cookie("cookieTwoName", "cookieTwoValue")
         ))));
 
+        assertTrue(new HashMapMatcher(KeyAndValue.toHashMap(
+                new Cookie(not("cookieOneName"), not("cookieOneValue"))
+        )).matches(new ArrayList<KeyAndValue>(Arrays.asList(
+                new Cookie("notCookieOneName", "notCookieOneValue"),
+                new Cookie("cookieTwoName", "cookieTwoValue")
+        ))));
+
         assertFalse(new HashMapMatcher(KeyAndValue.toHashMap(
                 new Cookie(not("cookieOneName"), not("cookieOneValue"))
         )).matches(new ArrayList<KeyAndValue>(Arrays.asList(

@@ -13,7 +13,7 @@ import static org.mockserver.model.NottableString.strings;
 /**
  * @author jamesdbloom
  */
-public class KeyToMultiValue extends Not {
+public class KeyToMultiValue extends ObjectWithJsonToString {
     private final NottableString name;
     private final List<NottableString> values;
 

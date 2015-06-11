@@ -40,7 +40,9 @@ public class CaseInsensitiveRegexHashMap extends LinkedHashMap<NottableString, N
             return true;
         } else {
             for (Entry<NottableString, NottableString> entry : subSet.entrySet()) {
-                if (!containsKeyValue(entry.getKey(), entry.getValue())) {
+                if (entry.getKey().isNot() && containsKey(entry.getKey().getValue())) {
+                    return false;
+                } else if (!containsKeyValue(entry.getKey(), entry.getValue())) {
                     return false;
                 }
             }
