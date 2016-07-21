@@ -7,7 +7,6 @@ import org.mockserver.client.serialization.ExpectationSerializer;
 import org.mockserver.client.serialization.HttpRequestSerializer;
 import org.mockserver.client.serialization.VerificationSequenceSerializer;
 import org.mockserver.client.serialization.VerificationSerializer;
-import org.mockserver.client.server.MockServerClient;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.slf4j.Logger;
@@ -88,7 +87,7 @@ public abstract class AbstractClient {
     }
 
     protected HttpResponse sendRequest(HttpRequest httpRequest) {
-        return nettyHttpClient.sendRequest(outboundRequest(protocol, host, port, basePath + "/" + contextPath, httpRequest));
+        return nettyHttpClient.sendRequest(outboundRequest(protocol, host, port, StringUtils.isEmpty(basePath) ? contextPath : basePath + "/" + contextPath, httpRequest));
     }
 
     protected String formatErrorMessage(String message, Object... objects) {
