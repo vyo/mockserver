@@ -14,32 +14,12 @@ import org.mockserver.verify.VerificationSequence;
 import org.mockserver.verify.VerificationTimes;
 
 import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.verify.VerificationTimes.exactly;
 
 /**
  * @author jamesdbloom
  */
 public class MockServerClient extends AbstractClient {
-
-    public static void main (String... args) {
-        try {
-            MockServerClient client = new MockServerClient(HttpRequest.Protocol.HTTPS, "cvertrieb-p8001.dp-dhl.de", 443, "/emmi", "/mock");
-            HttpRequest request = request()
-                    .withMethod("GET")
-                    .withPath("/config");
-
-//        val expectation = ForwardChainExpectation(client, Expectation( request, Times.unlimited(), TimeToLive.unlimited()))
-//        expectation.respond(response("I'm a config, honest!"))
-
-            client.reset();
-            client.when(request).respond(response("I'm a config, honest!\nWell, maybe not.\nMaybe I'm lying.\nWho effing knows."));
-
-            System.out.println();
-        } catch (Exception e) {
-            System.out.println();
-        }
-    }
 
     /**
      * Start the client communicating to a MockServer at the specified host and port
